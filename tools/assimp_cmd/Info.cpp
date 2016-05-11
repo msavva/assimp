@@ -125,7 +125,7 @@ void FindSpecialPoints(const aiScene* scene,const aiNode* root,aiVector3D specia
 {
 	// XXX that could be greatly simplified by using code from code/ProcessHelper.h
 	// XXX I just don't want to include it here.
-	const aiMatrix4x4 trafo = root->mTransformation*mat;
+	const aiMatrix4x4 trafo = mat*root->mTransformation;
 	for(unsigned int i = 0; i < root->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[root->mMeshes[i]];
 
