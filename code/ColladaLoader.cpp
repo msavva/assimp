@@ -1398,8 +1398,9 @@ void ColladaLoader::FillMaterials( const ColladaParser& pParser, aiScene* /*pSce
             }
 
             // Is the material finally transparent ?
-            if (effect.mHasTransparency || effect.mTransparency < 1.f) {
-                mat.AddProperty( &effect.mTransparency, 1, AI_MATKEY_OPACITY );
+            if (effect.mHasTransparency || effect.mTransparency > 0.f) {
+                float opacity = 1.f - effect.mTransparency;
+                mat.AddProperty(&opacity, 1, AI_MATKEY_OPACITY);
             }
         }
 
