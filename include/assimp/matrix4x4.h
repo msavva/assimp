@@ -41,11 +41,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file matrix4x4.h
  *  @brief 4x4 matrix structure, including operators when compiling in C++
  */
+#pragma once
 #ifndef AI_MATRIX4X4_H_INC
 #define AI_MATRIX4X4_H_INC
 
 #include "vector3.h"
 #include "./Compiler/pushpack1.h"
+#include "defs.h"
 
 #ifdef __cplusplus
 
@@ -228,15 +230,15 @@ public:
     TReal d1, d2, d3, d4;
 } PACK_STRUCT;
 
-typedef aiMatrix4x4t<float> aiMatrix4x4;
+typedef aiMatrix4x4t<ai_real> aiMatrix4x4;
 
 #else
 
 struct aiMatrix4x4 {
-    float a1, a2, a3, a4;
-    float b1, b2, b3, b4;
-    float c1, c2, c3, c4;
-    float d1, d2, d3, d4;
+    ai_real a1, a2, a3, a4;
+    ai_real b1, b2, b3, b4;
+    ai_real c1, c2, c3, c4;
+    ai_real d1, d2, d3, d4;
 } PACK_STRUCT;
 
 
