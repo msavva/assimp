@@ -1820,8 +1820,15 @@ void ColladaParser::ReadMesh( Mesh* pMesh)
             else if( IsElement( "triangles") || IsElement( "lines") || IsElement( "linestrips")
                 || IsElement( "polygons") || IsElement( "polylist") || IsElement( "trifans") || IsElement( "tristrips"))
             {
-                // read per-index mesh data and faces setup
-                ReadIndexData( pMesh);
+                // NOTE(MS): if no vertex data, skip this element
+                if ( pMesh->mPerVertexData.empty())
+                {
+                    SkipElement();
+                } else
+                {
+                    // read per-index mesh data and faces setup
+                    ReadIndexData( pMesh);
+                } 
             } else
             {
                 // ignore the rest
@@ -1853,6 +1860,8 @@ void ColladaParser::ReadSource()
 {
     int indexID = GetAttribute( "id");
     std::string sourceID = mReader->getAttributeValue( indexID);
+    if( mReader->isEmptyElement())
+        return;
 
     while( mReader->read())
     {
@@ -2067,6 +2076,8 @@ void ColladaParser::ReadVertexData( Mesh* pMesh)
     // extract the ID of the <vertices> element. Not that we care, but to catch strange referencing schemes we should warn about
     int attrID= GetAttribute( "id");
     pMesh->mVertexID = mReader->getAttributeValue( attrID);
+    if( mReader->isEmptyElement())
+        return;
 
     // a number of <input> elements
     while( mReader->read())
