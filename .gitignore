@@ -29,6 +29,13 @@ cmake_uninstall.cmake
 assimp-config.cmake
 assimp-config-version.cmake
 
+# MakeFile
+Makefile
+code/Makefile
+test/Makefile
+test/headercheck/Makefile
+tools/assimp_cmd/Makefile
+
 # Tests
 test/results
 
@@ -74,3 +81,5 @@ lib64/assimp-vc120-mtd.ilk
 lib64/assimp-vc120-mtd.exp
 lib64/assimp-vc120-mt.exp
 xcuserdata
+
+cmake-build-debug

@@ -1,9 +1,10 @@
-/*
+﻿/*
 ---------------------------------------------------------------------------
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2017, assimp team
+
 
 All rights reserved.
 
@@ -88,9 +89,7 @@ AI_WONT_RETURN void ValidateDSProcess::ReportError(const char* msg,...)
     ai_assert(iLen > 0);
 
     va_end(args);
-#ifdef ASSIMP_BUILD_DEBUG
-    ai_assert( false );
-#endif
+
     throw DeadlyImportError("Validation failed: " + std::string(szBuffer,iLen));
 }
 // ------------------------------------------------------------------------------------------------
@@ -408,11 +407,12 @@ void ValidateDSProcess::Validate( const aiMesh* pMesh)
             // the MSB flag is temporarily used by the extra verbose
             // mode to tell us that the JoinVerticesProcess might have
             // been executed already.
-            if ( !(this->mScene->mFlags & AI_SCENE_FLAGS_NON_VERBOSE_FORMAT ) && abRefList[face.mIndices[a]])
+			/*if ( !(this->mScene->mFlags & AI_SCENE_FLAGS_NON_VERBOSE_FORMAT ) && !(this->mScene->mFlags & AI_SCENE_FLAGS_ALLOW_SHARED) &&
+				abRefList[face.mIndices[a]])
             {
                 ReportError("aiMesh::mVertices[%i] is referenced twice - second "
                     "time by aiMesh::mFaces[%i]::mIndices[%i]",face.mIndices[a],i,a);
-            }
+            }*/
             abRefList[face.mIndices[a]] = true;
         }
     }
@@ -719,7 +719,7 @@ void ValidateDSProcess::Validate( const aiMaterial* pMaterial)
     }
 
     // make some more specific tests
-    float fTemp;
+    ai_real fTemp;
     int iShading;
     if (AI_SUCCESS == aiGetMaterialInteger( pMaterial,AI_MATKEY_SHADING_MODEL,&iShading))   {
         switch ((aiShadingMode)iShading)
@@ -741,7 +741,7 @@ void ValidateDSProcess::Validate( const aiMaterial* pMaterial)
         };
     }
 
-    if (AI_SUCCESS == aiGetMaterialFloat( pMaterial,AI_MATKEY_OPACITY,&fTemp) && (!fTemp || fTemp > 1.01f)) {
+    if (AI_SUCCESS == aiGetMaterialFloat( pMaterial,AI_MATKEY_OPACITY,&fTemp) && (!fTemp || fTemp > 1.01)) {
         ReportWarning("Invalid opacity value (must be 0 < opacity < 1.0)");
     }
 

@@ -156,6 +156,8 @@ private:
 	// Lighting
 	bool mLightingEnabled = false;///< If true then OpenGL lighting is enabled (glEnable(GL_LIGHTING)), if false - disabled.
 	// Textures
+	///TODO: map is goooood, but not for case when one image can be used in different materials with difference in: texture transformation, targeting of the
+	/// texture (ambient or emission, or even height map), texture properties.
 	QMap<QString, GLuint> mTexture_IDMap;///< Map image filenames to textures ID's.
 
 	/**********************************/
@@ -247,13 +249,13 @@ private:
 	void Draw_BBox(const SBBox& pBBox);
 
 	/********************************************************************/
-	/*********************** Overrided functions ************************/
+	/*********************** Override functions ************************/
 	/********************************************************************/
 
 protected:
-
+    void drawCoordSystem();
 	/// \fn void initializeGL() override
-	/// Overrided function for initialise OpenGL.
+	/// Override function to initialise OpenGL.
 	void initializeGL() override;
 
 	/// \fn void resizeGL(int pWidth, int pHeight) override
@@ -262,7 +264,7 @@ protected:
 	void resizeGL(int pWidth, int pHeight) override;
 
 	/// \fn void paintGL() override
-	/// Overrided function for rendering.
+	/// Override function for rendering.
 	void paintGL() override;
 
 public:
