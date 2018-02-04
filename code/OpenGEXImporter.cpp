@@ -2,7 +2,8 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 All rights reserved.
 
@@ -44,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/DefaultIOSystem.h>
 #include <assimp/DefaultLogger.hpp>
 #include "MakeVerboseFormat.h"
-#include "StringComparison.h"
+#include <assimp/StringComparison.h>
 
 #include <openddlparser/OpenDDLParser.h>
 #include <assimp/scene.h>
@@ -652,6 +653,8 @@ static void setMatrix( aiNode *node, DataArrayList *transformData ) {
         i++;
     }
 
+    ai_assert(i == 16);
+
     node->mTransformation.a1 = m[ 0 ];
     node->mTransformation.a2 = m[ 4 ];
     node->mTransformation.a3 = m[ 8 ];
@@ -776,10 +779,22 @@ static void fillColor4( aiColor4D *col4, Value *vals ) {
     Value *next( vals );
     col4->r = next->getFloat();
     next = next->m_next;
+    if (!next) {
+        throw DeadlyImportError( "OpenGEX: Not enough values to fill 4-element color, only 1" );
+    }
+
     col4->g = next->getFloat();
     next = next->m_next;
+    if (!next) {
+        throw DeadlyImportError( "OpenGEX: Not enough values to fill 4-element color, only 2" );
+    }
+
     col4->b = next->getFloat();
     next = next->m_next;
+    if (!next) {
+        throw DeadlyImportError( "OpenGEX: Not enough values to fill 4-element color, only 3" );
+    }
+
     col4->a = next->getFloat();
 }
 

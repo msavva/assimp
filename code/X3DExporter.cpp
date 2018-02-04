@@ -9,8 +9,8 @@
 #include "X3DExporter.hpp"
 
 // Header files, Assimp.
-#include "Exceptional.h"
-#include "StringUtils.h"
+#include <assimp/Exceptional.h>
+#include <assimp/StringUtils.h>
 #include <assimp/Exporter.hpp>
 #include <assimp/IOSystem.hpp>
 
@@ -240,8 +240,12 @@ list<SAttribute> attr_list;
 		if((rotate_angle != 0) && (rotate_axis.Length() > 0))
 			attr_list.push_back({"rotation", Rotation2String(rotate_axis, rotate_angle)});
 
-		if(!scale.Equal({1, 1, 1})) attr_list.push_back({"scale", Vector2String(scale)});
-		if(translate.Length() > 0) attr_list.push_back({"translation", Vector2String(translate)});
+        if(!scale.Equal({1.0,1.0,1.0})) {
+            attr_list.push_back({"scale", Vector2String(scale)});
+        }
+        if(translate.Length() > 0) {
+            attr_list.push_back({"translation", Vector2String(translate)});
+        }
 	}
 
 	// Begin node if need.

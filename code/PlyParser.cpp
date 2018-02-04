@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 All rights reserved.
 
@@ -44,9 +45,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef ASSIMP_BUILD_NO_PLY_IMPORTER
 
-#include "fast_atof.h"
+#include <assimp/fast_atof.h>
 #include <assimp/DefaultLogger.hpp>
-#include "ByteSwapper.h"
+#include <assimp/ByteSwapper.h>
 #include "PlyLoader.h"
 
 using namespace Assimp;
@@ -671,7 +672,6 @@ bool PLY::ElementInstanceList::ParseInstanceList(
   PLYImporter* loader)
 {
   ai_assert(NULL != pcElement);
-  const char* pCur = (const char*)&buffer[0];
 
   // parse all elements
   if (EEST_INVALID == pcElement->eSemantic || pcElement->alProperties.empty())
@@ -683,11 +683,11 @@ bool PLY::ElementInstanceList::ParseInstanceList(
       PLY::DOM::SkipComments(buffer);
       PLY::DOM::SkipLine(buffer);
       streamBuffer.getNextLine(buffer);
-      pCur = (buffer.empty()) ? NULL : (const char*)&buffer[0];
     }
   }
   else
   {
+    const char* pCur = (const char*)&buffer[0];
     // be sure to have enough storage
     for (unsigned int i = 0; i < pcElement->NumOccur; ++i)
     {

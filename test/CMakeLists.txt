@@ -1,7 +1,8 @@
 # Open Asset Import Library (assimp)
 # ----------------------------------------------------------------------
 #
-# Copyright (c) 2006-2017, assimp team
+# Copyright (c) 2006-2018, assimp team
+
 
 # All rights reserved.
 #
@@ -37,9 +38,6 @@
 #
 #----------------------------------------------------------------------
 cmake_minimum_required( VERSION 2.6 )
-
-include( CTest )
-enable_testing()
 
 INCLUDE_DIRECTORIES(
 	../contrib/gtest/include
@@ -148,7 +146,7 @@ SET( POST_PROCESSES
   unit/utSceneCombiner.cpp
 )
 
-SOURCE_GROUP( UnitTests\Compiler     FILES  unit/CCompilerTest.c )
+SOURCE_GROUP( UnitTests\\Compiler     FILES  unit/CCompilerTest.c )
 SOURCE_GROUP( UnitTests\\Common      FILES  ${COMMON} )
 SOURCE_GROUP( UnitTests\\Importers   FILES  ${IMPORTERS} )
 SOURCE_GROUP( UnitTests\\Material    FILES  ${MATERIAL} )
@@ -175,6 +173,13 @@ IF( WIN32 )
     SET( platform_libs )
 ELSE( WIN32 )
     SET( platform_libs pthread )
+ENDIF( WIN32 )
+
+IF( WIN32 )
+  ADD_CUSTOM_COMMAND(TARGET unit
+    PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp> $<TARGET_FILE_DIR:unit>
+    MAIN_DEPENDENCY assimp)
 ENDIF( WIN32 )
 
 IF(MSVC)
