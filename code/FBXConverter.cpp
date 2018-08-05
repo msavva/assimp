@@ -73,10 +73,6 @@ using namespace Util;
 
 #define CONVERT_FBX_TIME(time) static_cast<double>(time) / 46186158000L
 
-// XXX vc9's debugger won't step into anonymous namespaces
-//namespace {
-
-
 Converter::Converter( aiScene* out, const Document& doc )
 : defaultMaterialIndex()
 , out( out )
@@ -189,12 +185,12 @@ void Converter::ConvertNodes( uint64_t id, aiNode& parent, const aiMatrix4x4& pa
                 }
 
                 if ( !name_carrier ) {
-                    NodeNameCache::const_iterator it( std::find( mNodeNames.begin(), mNodeNames.end(), original_name ) );
+                    NodeNameCache::const_iterator it = mNodeNames.find(original_name);
                     if ( it != mNodeNames.end() ) {
                         original_name = original_name + std::string( "001" );
                     }
 
-                    mNodeNames.push_back( original_name );
+                    mNodeNames.insert( original_name );
                     nodes_chain.push_back( new aiNode( original_name ) );
                 } else {
                     original_name = nodes_chain.back()->mName.C_Str();
@@ -402,29 +398,18 @@ void Converter::ConvertCamera( const Camera& cam, const std::string &orig_name )
     out_camera->mClipPlaneFar = cam.FarPlane();
 }
 
-static bool HasName( NodeNameCache &cache, const std::string &name ) {
-    NodeNameCache::const_iterator it( std::find( cache.begin(), cache.end(), name ) );
-    return it != cache.end();
-
-}
-void Converter::GetUniqueName( const std::string &name, std::string uniqueName ) {
-    if ( !HasName( mNodeNames, name ) ) {
-        uniqueName = name;
-        return;
-    }
-
-    int i( 0 );
-    std::string newName;
-    while ( HasName( mNodeNames, newName ) ) {
+void Converter::GetUniqueName( const std::string &name, std::string &uniqueName )
+{
+    int i = 0;
+    uniqueName = name;
+    while (mNodeNames.find(uniqueName) != mNodeNames.end())
+    {
         ++i;
-        newName.clear();
-        newName += name;
         std::stringstream ext;
-        ext << std::setfill( '0' ) << std::setw( 3 ) << i;
-        newName += ext.str();
+        ext << name << std::setfill('0') << std::setw(3) << i;
+        uniqueName = ext.str();
     }
-    uniqueName = newName;
-    mNodeNames.push_back( uniqueName );
+    mNodeNames.insert(uniqueName);
 }
 
 
@@ -3099,8 +3084,6 @@ void Converter::TransferDataToScene()
         std::swap_ranges( textures.begin(), textures.end(), out->mTextures );
     }
 }
-
-//} // !anon
 
 // ------------------------------------------------------------------------------------------------
 void ConvertToAssimpScene(aiScene* out, const Document& doc)

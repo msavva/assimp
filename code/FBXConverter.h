@@ -68,7 +68,7 @@ namespace FBX {
 
 class Document;
 
-using NodeNameCache = std::vector<std::string>;
+using NodeNameCache = std::set<std::string>;
 
 /** 
  *  Convert a FBX #Document to #aiScene
@@ -131,7 +131,7 @@ private:
     void ConvertCamera( const Camera& cam, const std::string &orig_name );
 
     // ------------------------------------------------------------------------------------------------
-    void GetUniqueName( const std::string &name, std::string uniqueName );
+    void GetUniqueName( const std::string &name, std::string& uniqueName );
 
     // ------------------------------------------------------------------------------------------------
     // this returns unified names usable within assimp identifiers (i.e. no space characters -
