@@ -314,20 +314,20 @@ private:
         ++buf;
         comp[ 1 ] = *buf;
         ++buf;
-        diffuse.r = static_cast<ai_real>( strtol( comp, NULL, 16 ) ) / 255.0;
+        diffuse.r = static_cast<ai_real>( strtol( comp, NULL, 16 ) ) / ai_real(255.0);
 
 
         comp[ 0 ] = *buf;
         ++buf;
         comp[ 1 ] = *buf;
         ++buf;
-        diffuse.g = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / 255.0;
+        diffuse.g = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / ai_real(255.0);
 
         comp[ 0 ] = *buf;
         ++buf;
         comp[ 1 ] = *buf;
         ++buf;
-        diffuse.b = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / 255.0;
+        diffuse.b = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / ai_real(255.0);
 
         if(7 == len)
             return true;
@@ -335,7 +335,7 @@ private:
         ++buf;
         comp[ 1 ] = *buf;
         ++buf;
-        diffuse.a = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / 255.0;
+        diffuse.a = static_cast< ai_real >( strtol( comp, NULL, 16 ) ) / ai_real(255.0);
 
         return true;
     }
@@ -419,8 +419,6 @@ private:
 
 } //namespace D3MF
 
-static const std::string Extension = "3mf";
-
 static const aiImporterDesc desc = {
     "3mf Importer",
     "",
@@ -431,7 +429,7 @@ static const aiImporterDesc desc = {
     0,
     0,
     0,
-    Extension.c_str()
+    "3mf"
 };
 
 D3MFImporter::D3MFImporter()
@@ -445,7 +443,7 @@ D3MFImporter::~D3MFImporter() {
 
 bool D3MFImporter::CanRead(const std::string &filename, IOSystem *pIOHandler, bool checkSig) const {
     const std::string extension( GetExtension( filename ) );
-    if(extension == Extension ) {
+    if(extension == desc.mFileExtensions ) {
         return true;
     } else if ( !extension.length() || checkSig ) {
         if ( nullptr == pIOHandler ) {

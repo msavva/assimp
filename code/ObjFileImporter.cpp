@@ -105,7 +105,7 @@ bool ObjFileImporter::CanRead( const std::string& pFile, IOSystem*  pIOHandler ,
 }
 
 // ------------------------------------------------------------------------------------------------
-const aiImporterDesc* ObjFileImporter::GetInfo () const {
+const aiImporterDesc* ObjFileImporter::GetInfo() const {
     return &desc;
 }
 
@@ -143,38 +143,6 @@ void ObjFileImporter::InternReadFile( const std::string &file, aiScene* pScene, 
     } else {
         modelName = file;
     }
-
-    // This next stage takes ~ 1/3th of the total readFile task
-    // so should amount for 1/3th of the progress
-    // only update every 100KB or it'll be too slow
-    /*unsigned int progress = 0;
-    unsigned int progressCounter = 0;
-    const unsigned int updateProgressEveryBytes = 100 * 1024;
-    const unsigned int progressTotal = static_cast<unsigned int>(3*m_Buffer.size()/updateProgressEveryBytes);*/
-    // process all '\'
-    /*std::vector<char> ::iterator iter = m_Buffer.begin();
-    while (iter != m_Buffer.end())
-    {
-        if (*iter == '\\')
-        {
-            // remove '\'
-            iter = m_Buffer.erase(iter);
-            // remove next character
-            while (*iter == '\r' || *iter == '\n')
-                iter = m_Buffer.erase(iter);
-        }
-        else
-            ++iter;
-
-        if (++progressCounter >= updateProgressEveryBytes)
-        {
-            m_progress->UpdateFileRead(++progress, progressTotal);
-            progressCounter = 0;
-        }
-    }*/
-
-    // 1/3rd progress
-    m_progress->UpdateFileRead(1, 3);
 
     // parse the file into a temporary representation
     ObjFileParser parser( streamedBuffer, modelName, pIOHandler, m_progress, file);
@@ -251,7 +219,7 @@ void ObjFileImporter::CreateDataFromImport(const ObjFile::Model* pModel, aiScene
 
 		std::unique_ptr<aiMesh> mesh( new aiMesh );
         mesh->mPrimitiveTypes = aiPrimitiveType_POINT;
-        unsigned int n = pModel->m_Vertices.size();
+        unsigned int n = (unsigned int)pModel->m_Vertices.size();
         mesh->mNumVertices = n;
 
         mesh->mVertices = new aiVector3D[n];
